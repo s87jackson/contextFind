@@ -1,0 +1,4 @@
+Name: ContextFind
+Description: Search for a string in your codebase, get results with context, and links to quickly navigate to results
+Binding: contextFind_addin
+Interactive: true

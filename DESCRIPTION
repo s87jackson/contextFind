@@ -1,0 +1,17 @@
+Package: contextFind
+Title: Find code snippets with context and click to navigate directly to results
+Version: 0.1.0
+Authors@R: person("Steve", "Jackson", 
+    email="s87jackson@gmail.com",
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-3337-7846"))
+Description: Search across R files with contextual results, highlights and clickable links. Includes an add-in for further workflow enhancement.
+License: CC0
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports:
+    rstudioapi,
+    cli,
+    shiny,
+    miniUI
