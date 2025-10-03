@@ -8,3 +8,14 @@ CLAUDE.md
 ^update_process\.R$
 in_development
 in_development/
+sticker.pptx
+
+inst/doc
+.Rproj.user
+/doc/
+/Meta/
+^update_process\.R$
+
+.RData
+.RDataTmp
+.Rhistory
