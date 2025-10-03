@@ -22,11 +22,8 @@ search string, the directory, whether to search subdiretories, and how
 many lines of context to print before and after the found search string:
 
 <figure>
-<img src="inst/images/miniPage.png"
-alt="The contextFind gadget with inputs for search string and context lines, a button to choose the directory, and a checkbox to search subdirectories." />
-<figcaption aria-hidden="true">The contextFind gadget with inputs for
-search string and context lines, a button to choose the directory, and a
-checkbox to search subdirectories.</figcaption>
+<img src="inst/images/miniPage.png" alt="" />
+<figcaption aria-hidden="true"></figcaption>
 </figure>
 
 Clicking the contextFind button prints the results to the console. For
@@ -58,10 +55,8 @@ After installing contextFind, restart RStudio, then set contextFind to a
 hotkey by selecting Tools \>\> Modify Keyboard Shortcuts:
 
 <figure>
-<img src="inst/images/hotkey.png"
-alt="RStudio’s Keyboard Shortcuts interface." />
-<figcaption aria-hidden="true">RStudio’s Keyboard Shortcuts
-interface.</figcaption>
+<img src="inst/images/hotkey.png" alt="" />
+<figcaption aria-hidden="true"></figcaption>
 </figure>
 
 Now typing Ctrl+Shift+F opens the gadget to perform the search. If text
@@ -70,8 +65,6 @@ automatically. In the example below, we search for the string ‘selected’
 and see the results:
 
 <figure>
-<img src="inst/images/results.png"
-alt="Example results for ‘selected’ in the package’s files." />
-<figcaption aria-hidden="true">Example results for ‘selected’ in the
-package’s files.</figcaption>
+<img src="inst/images/results.png" alt="" />
+<figcaption aria-hidden="true"></figcaption>
 </figure>

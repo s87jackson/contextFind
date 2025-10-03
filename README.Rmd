@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# contextFind <img src="man/logo.svg" align="right" width="120"/>
+# contextFind <img src="man/figures/logo.svg" align="right" width="120"/>
 
 <!-- badges: start -->
 
