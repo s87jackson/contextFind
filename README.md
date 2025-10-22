@@ -22,7 +22,7 @@ search string, the directory, whether to search subdiretories, and how
 many lines of context to print before and after the found search string:
 
 <figure>
-<img src="inst/images/miniPage.png" alt="" />
+<img src="man/figures/miniPage.png" alt="" />
 <figcaption aria-hidden="true"></figcaption>
 </figure>
 
@@ -55,7 +55,7 @@ After installing contextFind, restart RStudio, then set contextFind to a
 hotkey by selecting Tools \>\> Modify Keyboard Shortcuts:
 
 <figure>
-<img src="inst/images/hotkey.png" alt="" />
+<img src="man/figures/hotkey.png" alt="" />
 <figcaption aria-hidden="true"></figcaption>
 </figure>
 
@@ -65,6 +65,6 @@ automatically. In the example below, we search for the string ‘selected’
 and see the results:
 
 <figure>
-<img src="inst/images/results.png" alt="" />
+<img src="man/figures/results.png" alt="" />
 <figcaption aria-hidden="true"></figcaption>
 </figure>

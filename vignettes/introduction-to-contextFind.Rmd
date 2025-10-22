@@ -1,0 +1,429 @@
+---
+title: "Introduction to contextFind"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to contextFind}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Overview
+
+`contextFind` is a convenient code search tool designed for R developers who work with multi-file projects such as Shiny applications, R packages, or complex analysis workflows. Unlike basic text search, `contextFind` provides:
+
+-   **Context-aware results**: See surrounding lines of code for each match
+-   **Clickable navigation**: Jump directly to the exact line in your source files
+-   **Smart ordering**: Results sorted by modification time, so recent changes appear last (easier to read in console)
+-   **Highlighted matches**: Visual emphasis on the search term within results
+-   **RStudio integration**: Fast access via keyboard shortcuts
+
+## Installation
+
+Install from CRAN:
+
+```{r}
+install.packages("contextFind")
+```
+
+Or get the development version from GitHub:
+
+```{r}
+devtools::install_github("s87jackson/contextFind")
+```
+
+## Basic Usage
+
+### The contextFind() Function
+
+The core function `contextFind()` searches for text across your R and Rmd files:
+
+```{r}
+library(contextFind)
+
+# Search for all function definitions in your project
+contextFind("<- function")
+```
+
+This will output results like:
+
+```         
+Found 15 matches for "<- function"
+
+==============================
+Match 15 of 15
+server.R (line 42)
+Last Modified: 2024-10-15 14:32:10
+------------------------------
+   Line 40:
+   Line 41: # Define server logic
+   Line 42: server <- function(input, output, session) {
+   Line 43:
+   Line 44:   # Reactive values
+```
+
+Each match shows: - File name and line number (clickable in supported terminals) - Last modification time of the file - Context lines around the match (default: 2 before and 2 after) - The matching line highlighted
+
+### Key Parameters
+
+#### contextLines
+
+Control how much surrounding code to display:
+
+```{r}
+# No context - just the matching line
+contextFind("renderPlot", contextLines = 0)
+
+# More context for complex functions
+contextFind("reactive", contextLines = 5)
+```
+
+#### path
+
+Limit your search to specific directories:
+
+```{r}
+# Search only in the R/ directory
+contextFind("validate", path = "R")
+
+# Search in a subdirectory
+contextFind("test", path = "tests/testthat")
+```
+
+#### recursive
+
+Control whether to search subdirectories:
+
+```{r}
+# Search only the current directory (no subdirectories)
+contextFind("TODO", recursive = FALSE)
+
+# Search all subdirectories (default)
+contextFind("TODO", recursive = TRUE)
+```
+
+## Using the RStudio Addin
+
+The `contextFind` package includes an RStudio addin that provides an interactive interface for searching your code.
+
+### Setup
+
+1.  **Install and restart RStudio** after installing `contextFind`
+
+2.  **Assign a keyboard shortcut**:
+
+    -   Go to Tools \> Modify Keyboard Shortcuts
+    -   Search for "contextFind"
+    -   Assign a shortcut (recommended: `Ctrl+Shift+F` or `Cmd+Shift+F` on Mac)
+
+### Using the Addin
+
+1.  **Highlight text** in your script (optional but convenient)
+2.  **Press your keyboard shortcut** to open the contextFind dialog
+3.  **Configure your search**:
+    -   Search string (pre-filled if you highlighted text)
+    -   Directory (click "Choose directory" to change)
+    -   Recursive search checkbox
+    -   Number of context lines
+4.  **Click "contextFind"** to see results in the console
+
+The addin will pre-fill the search box with any highlighted text, making it fast to search for variables or function names you're currently working with.
+
+## Common Use Cases
+
+### Finding Function Definitions
+
+```{r}
+# Find all function definitions
+contextFind("<- function")
+
+# Find a specific function
+contextFind("calculate_metrics <- function")
+```
+
+### Tracking Variable Usage
+
+```{r}
+# Find where a variable is used
+contextFind("user_data")
+
+# Find reactive values in Shiny apps
+contextFind("reactiveVal")
+```
+
+### Locating UI Components
+
+```{r}
+# Find specific input widgets
+contextFind("selectInput")
+
+# Find output renderers
+contextFind("renderPlot")
+```
+
+### Code Review and TODOs
+
+```{r}
+# Find all TODO comments
+contextFind("TODO")
+
+# Find FIXME or bug markers
+contextFind("FIXME")
+
+# Find deprecated functions
+contextFind(".Deprecated")
+```
+
+### Library and Package Usage
+
+```{r}
+# Find all uses of a package
+contextFind("dplyr::")
+
+# Find library calls
+contextFind("library(")
+
+# Find specific ggplot geoms
+contextFind("geom_point")
+```
+
+### Debugging
+
+```{r}
+# Find browser() calls you may have left in code
+contextFind("browser()")
+
+# Find print statements
+contextFind("print(")
+
+# Find error handling
+contextFind("tryCatch")
+```
+
+## Working with Results Programmatically
+
+`contextFind()` invisibly returns a list of results that you can work with:
+
+```{r}
+# Store results
+results <- contextFind("ggplot")
+
+# Access the first match
+results[[1]]$file         # Full file path
+results[[1]]$match_line   # Line number where match was found
+results[[1]]$mtime        # File modification time
+results[[1]]$context      # Named character vector of context lines
+
+# Get all matching files
+unique(sapply(results, function(x) x$file))
+
+# Count matches per file
+table(sapply(results, function(x) basename(x$file)))
+
+# Find most recently modified files with matches
+recent <- results[[length(results)]]
+cat("Most recent match in:", basename(recent$file),
+    "at line", recent$match_line, "\n")
+```
+
+## Tips and Tricks
+
+### 1. Search for Partial Patterns
+
+Since `contextFind` uses literal string matching (not regex), you can search for partial code patterns:
+
+```{r}
+# Find all assignments to variables starting with "df_"
+contextFind("df_")
+
+# Find function calls (including arguments)
+contextFind("function(")
+```
+
+### 2. Combine with Version Control
+
+Search for recent changes in modified files:
+
+```{r}
+# After modifying files, find where you used a new function
+contextFind("new_function")
+```
+
+The results are sorted by modification time, so your recent changes appear last - right where you're reading in the console.
+
+### 3. Navigate Large Projects
+
+For large Shiny apps or packages:
+
+```{r}
+# Find all observers
+contextFind("observe(")
+
+# Find all event handlers
+contextFind("observeEvent")
+
+# Find module calls
+contextFind("Module(")
+```
+
+### 4. Batch Searches
+
+Use the function in scripts or reports:
+
+```{r}
+# Find all functions that need documentation
+results <- contextFind("<- function", contextLines = 0)
+
+# Check if they have roxygen comments
+documented <- sapply(results, function(r) {
+  lines <- readLines(r$file)
+  line_before <- lines[max(1, r$match_line - 1)]
+  grepl("#'", line_before)
+})
+
+cat(sprintf("%d of %d functions have documentation\n",
+            sum(documented), length(documented)))
+```
+
+### 5. Case-Sensitive Searching
+
+Remember that `contextFind` is case-sensitive:
+
+```{r}
+# These are different searches:
+contextFind("data")       # lowercase
+contextFind("Data")       # uppercase
+```
+
+### 6. Work with File Patterns
+
+While `contextFind` searches both .R and .Rmd files automatically, you can narrow results by path:
+
+```{r}
+# Search only source files
+contextFind("function", path = "R/")
+
+# Search only test files
+contextFind("expect_", path = "tests/testthat/")
+
+# Search only vignettes
+contextFind("knitr", path = "vignettes/")
+```
+
+## Comparison with Other Tools
+
+### vs. RStudio's Find in Files
+
+-   **Advantages of contextFind**:
+    -   Shows context without opening files
+    -   Clickable links in console output
+    -   Programmatic access to results
+    -   Quick keyboard shortcut access
+    -   Sorted by modification time
+-   **When to use RStudio's Find in Files**:
+    -   Need regex patterns
+    -   Want to replace text
+    -   Need to search non-R files
+
+### vs. grep/ripgrep
+
+-   **Advantages of contextFind**:
+    -   R-native interface
+    -   Automatically finds R and Rmd files
+    -   Formatted output with clickable links
+    -   Integrated with RStudio
+-   **When to use grep/ripgrep**:
+    -   Need advanced regex
+    -   Search across all file types
+    -   Working in terminal
+
+## Advanced Examples
+
+### Find All Exported Functions in a Package
+
+```{r}
+# Search for roxygen @export tags
+results <- contextFind("@export", path = "R/")
+
+# Find what functions are exported
+exported_functions <- sapply(results, function(r) {
+  lines <- readLines(r$file)
+  # Look ahead for function definition
+  func_line <- lines[r$match_line + 1]
+  if (grepl("<- function", func_line)) {
+    trimws(gsub("<-.*", "", func_line))
+  } else {
+    NA
+  }
+})
+
+cat("Exported functions:\n")
+print(na.omit(exported_functions))
+```
+
+### Check for Hardcoded Values
+
+```{r}
+# Find potential hardcoded file paths
+contextFind("C:/")
+contextFind("/Users/")
+
+# Find hardcoded credentials (be careful!)
+contextFind("password")
+contextFind("api_key")
+```
+
+### Analyze Shiny App Structure
+
+```{r}
+# Count UI elements
+ui_results <- contextFind("Input(", path = ".")
+cat("Number of input widgets:", length(ui_results), "\n")
+
+# Count outputs
+output_results <- contextFind("render", path = ".")
+cat("Number of render functions:", length(output_results), "\n")
+
+# Find reactive chains
+contextFind("reactive(")
+contextFind("observe(")
+```
+
+## Troubleshooting
+
+### No Results Found
+
+If `contextFind` returns no results:
+
+1.  Check your search term for typos
+2.  Verify the `path` parameter points to the correct directory
+3.  Ensure `recursive = TRUE` if searching subdirectories
+4.  Remember that searches are case-sensitive
+
+### Too Many Results
+
+To narrow down results:
+
+1.  Use more specific search terms
+2.  Limit the search path: `path = "R/"`
+3.  Use `recursive = FALSE` for current directory only
+4.  Reduce `contextLines` to see less context
+
+### Clickable Links Not Working
+
+Clickable links require:
+
+-   A terminal/console that supports ANSI escape sequences
+-   RStudio (recommended)
+-   Some external terminals may not support `file://` links
+
+## Contributing
+
+Found a bug or have a feature request? Please visit the [GitHub repository](https://github.com/s87jackson/contextFind) to open an issue or submit a pull request.

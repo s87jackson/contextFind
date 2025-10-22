@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Find code snippets with context and click to navigate directly to results • contextFind</title>
+<title>Find Code Snippets with Context and Click to Navigate Directly to Results • contextFind</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Find code snippets with context and click to navigate directly to results">
+<script src="pkgdown.js"></script><meta property="og:title" content="Find Code Snippets with Context and Click to Navigate Directly to Results">
 <meta property="og:description" content="Search across R files with contextual results, highlights and clickable links. Includes an add-in for further workflow enhancement.">
 <meta property="og:image" content="/logo.svg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">contextFind</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.1</span>
       </span>
     </div>
 
@@ -48,6 +48,18 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/introduction-to-contextFind.html">Introduction to contextFind</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -70,9 +82,7 @@
 <!-- badges: end -->
 <p>The goal of <code>contextFind</code> is to help developers find relevant parts of their code, especially helpful when code expands beyond a single file, such as with Shiny applications.</p>
 <p>The package includes an addin to bind <code><a href="reference/contextFind.html">contextFind()</a></code> to a hotkey (e.g., Ctrl+Shift+F). This opens a mini shiny application with inputs for the search string, the directory, whether to search subdiretories, and how many lines of context to print before and after the found search string:</p>
-<figure><img src="inst/images/miniPage.png" alt="The contextFind gadget with inputs for search string and context lines, a button to choose the directory, and a checkbox to search subdirectories."><figcaption aria-hidden="true">
-The contextFind gadget with inputs for search string and context lines, a button to choose the directory, and a checkbox to search subdirectories.
-</figcaption></figure><p>Clicking the contextFind button prints the results to the console. For each result (match), <code><a href="reference/contextFind.html">contextFind()</a></code> provides a clickable labelled link indicating the file and line number of the result, followed by <code>contextLines=2</code> lines before and after the occurrence, with the found string highlighted in yellow. The results are ordered with most recently modified files at the bottom of the list for ease of reading in the console.</p>
+<figure><img src="reference/figures/miniPage.png" alt=""><figcaption aria-hidden="true"></figcaption></figure><p>Clicking the contextFind button prints the results to the console. For each result (match), <code><a href="reference/contextFind.html">contextFind()</a></code> provides a clickable labelled link indicating the file and line number of the result, followed by <code>contextLines=2</code> lines before and after the occurrence, with the found string highlighted in yellow. The results are ordered with most recently modified files at the bottom of the list for ease of reading in the console.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -87,12 +97,8 @@ The contextFind gadget with inputs for search string and context lines, a button
 <h2 id="use">Use<a class="anchor" aria-label="anchor" href="#use"></a>
 </h2>
 <p>After installing contextFind, restart RStudio, then set contextFind to a hotkey by selecting Tools &gt;&gt; Modify Keyboard Shortcuts:</p>
-<figure><img src="inst/images/hotkey.png" alt="RStudio’s Keyboard Shortcuts interface."><figcaption aria-hidden="true">
-RStudio’s Keyboard Shortcuts interface.
-</figcaption></figure><p>Now typing Ctrl+Shift+F opens the gadget to perform the search. If text is higlighted when you type the hotkey, it will be passed to the gadget automatically. In the example below, we search for the string ‘selected’ and see the results:</p>
-<figure><img src="inst/images/results.png" alt="Example results for ‘selected’ in the package’s files."><figcaption aria-hidden="true">
-Example results for ‘selected’ in the package’s files.
-</figcaption></figure>
+<figure><img src="reference/figures/hotkey.png" alt=""><figcaption aria-hidden="true"></figcaption></figure><p>Now typing Ctrl+Shift+F opens the gadget to perform the search. If text is higlighted when you type the hotkey, it will be passed to the gadget automatically. In the example below, we search for the string ‘selected’ and see the results:</p>
+<figure><img src="reference/figures/results.png" alt=""><figcaption aria-hidden="true"></figcaption></figure>
 </div>
 </div>
   </div>

@@ -1,6 +1,6 @@
 Package: contextFind
-Title: Find code snippets with context and click to navigate directly to results
-Version: 0.1.0
+Title: Find Code Snippets with Context and Click to Navigate Directly to Results
+Version: 1.0.1
 Authors@R: person("Steve", "Jackson", 
     email="s87jackson@gmail.com",
     role = c("aut", "cre"),
@@ -15,3 +15,9 @@ Imports:
     cli,
     shiny,
     miniUI
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Config/testthat/edition: 3
+VignetteBuilder: knitr

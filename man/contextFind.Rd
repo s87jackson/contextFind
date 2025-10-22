@@ -2,9 +2,15 @@
 % Please edit documentation in R/contextFind.R
 \name{contextFind}
 \alias{contextFind}
-\title{Search R Files for Matching Text, Get Context and Links}
+\title{Search R and Rmd Files for Matching Text, Get Context and Links}
 \usage{
-contextFind(search_text, path = ".", recursive = TRUE, contextLines = 2)
+contextFind(
+  search_text,
+  path = ".",
+  recursive = TRUE,
+  contextLines = 2,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{search_text}{Text to search for}
@@ -14,10 +20,31 @@ contextFind(search_text, path = ".", recursive = TRUE, contextLines = 2)
 \item{recursive}{Whether to recurse into subfolders}
 
 \item{contextLines}{Number of context lines around match}
+
+\item{verbose}{If TRUE (the default), prints the results to the console}
 }
 \value{
-A list of matches
+A list of lists, one for each match, with objects: file, match_line, mtime, and context.
+file is the file path in which the match was found, match_line is the line number
+for this particular match, mtime is a POSIXct datetime value indicating when
+the file was last modified, and context contains the number of lines before
+and after the found match (set by the contextLines parameter).
 }
 \description{
-Search R Files for Matching Text, Get Context and Links
+Search R and Rmd Files for Matching Text, Get Context and Links
+}
+\examples{
+
+# Find custom functions in your codebase
+contextFind("<- function")
+
+# Get more context
+contextFind("<- function", contextLines = 3)
+
+# Explicitly set the search directory
+contextFind("<- function", path = getwd())
+
+# Exclude subdirectories
+contextFind("<- function", recursive = FALSE)
+
 }

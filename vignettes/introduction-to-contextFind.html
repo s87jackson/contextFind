@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to contextFind</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to contextFind</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p><code>contextFind</code> is a convenient code search tool designed
+for R developers who work with multi-file projects such as Shiny
+applications, R packages, or complex analysis workflows. Unlike basic
+text search, <code>contextFind</code> provides:</p>
+<ul>
+<li><strong>Context-aware results</strong>: See surrounding lines of
+code for each match</li>
+<li><strong>Clickable navigation</strong>: Jump directly to the exact
+line in your source files</li>
+<li><strong>Smart ordering</strong>: Results sorted by modification
+time, so recent changes appear last (easier to read in console)</li>
+<li><strong>Highlighted matches</strong>: Visual emphasis on the search
+term within results</li>
+<li><strong>RStudio integration</strong>: Fast access via keyboard
+shortcuts</li>
+</ul>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>Install from CRAN:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;contextFind&quot;</span>)</span></code></pre></div>
+<p>Or get the development version from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;s87jackson/contextFind&quot;</span>)</span></code></pre></div>
+</div>
+<div id="basic-usage" class="section level2">
+<h2>Basic Usage</h2>
+<div id="the-contextfind-function" class="section level3">
+<h3>The contextFind() Function</h3>
+<p>The core function <code>contextFind()</code> searches for text across
+your R and Rmd files:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(contextFind)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Search for all function definitions in your project</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;&lt;- function&quot;</span>)</span></code></pre></div>
+<p>This will output results like:</p>
+<pre><code>Found 15 matches for &quot;&lt;- function&quot;
+
+==============================
+Match 15 of 15
+server.R (line 42)
+Last Modified: 2024-10-15 14:32:10
+------------------------------
+   Line 40:
+   Line 41: # Define server logic
+   Line 42: server &lt;- function(input, output, session) {
+   Line 43:
+   Line 44:   # Reactive values</code></pre>
+<p>Each match shows: - File name and line number (clickable in supported
+terminals) - Last modification time of the file - Context lines around
+the match (default: 2 before and 2 after) - The matching line
+highlighted</p>
+</div>
+<div id="key-parameters" class="section level3">
+<h3>Key Parameters</h3>
+<div id="contextlines" class="section level4">
+<h4>contextLines</h4>
+<p>Control how much surrounding code to display:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># No context - just the matching line</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;renderPlot&quot;</span>, <span class="at">contextLines =</span> <span class="dv">0</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co"># More context for complex functions</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;reactive&quot;</span>, <span class="at">contextLines =</span> <span class="dv">5</span>)</span></code></pre></div>
+</div>
+<div id="path" class="section level4">
+<h4>path</h4>
+<p>Limit your search to specific directories:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Search only in the R/ directory</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;validate&quot;</span>, <span class="at">path =</span> <span class="st">&quot;R&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co"># Search in a subdirectory</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;test&quot;</span>, <span class="at">path =</span> <span class="st">&quot;tests/testthat&quot;</span>)</span></code></pre></div>
+</div>
+<div id="recursive" class="section level4">
+<h4>recursive</h4>
+<p>Control whether to search subdirectories:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Search only the current directory (no subdirectories)</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;TODO&quot;</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co"># Search all subdirectories (default)</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;TODO&quot;</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="using-the-rstudio-addin" class="section level2">
+<h2>Using the RStudio Addin</h2>
+<p>The <code>contextFind</code> package includes an RStudio addin that
+provides an interactive interface for searching your code.</p>
+<div id="setup" class="section level3">
+<h3>Setup</h3>
+<ol style="list-style-type: decimal">
+<li><p><strong>Install and restart RStudio</strong> after installing
+<code>contextFind</code></p></li>
+<li><p><strong>Assign a keyboard shortcut</strong>:</p>
+<ul>
+<li>Go to Tools &gt; Modify Keyboard Shortcuts</li>
+<li>Search for “contextFind”</li>
+<li>Assign a shortcut (recommended: <code>Ctrl+Shift+F</code> or
+<code>Cmd+Shift+F</code> on Mac)</li>
+</ul></li>
+</ol>
+</div>
+<div id="using-the-addin" class="section level3">
+<h3>Using the Addin</h3>
+<ol style="list-style-type: decimal">
+<li><strong>Highlight text</strong> in your script (optional but
+convenient)</li>
+<li><strong>Press your keyboard shortcut</strong> to open the
+contextFind dialog</li>
+<li><strong>Configure your search</strong>:
+<ul>
+<li>Search string (pre-filled if you highlighted text)</li>
+<li>Directory (click “Choose directory” to change)</li>
+<li>Recursive search checkbox</li>
+<li>Number of context lines</li>
+</ul></li>
+<li><strong>Click “contextFind”</strong> to see results in the
+console</li>
+</ol>
+<p>The addin will pre-fill the search box with any highlighted text,
+making it fast to search for variables or function names you’re
+currently working with.</p>
+</div>
+</div>
+<div id="common-use-cases" class="section level2">
+<h2>Common Use Cases</h2>
+<div id="finding-function-definitions" class="section level3">
+<h3>Finding Function Definitions</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Find all function definitions</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;&lt;- function&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># Find a specific function</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;calculate_metrics &lt;- function&quot;</span>)</span></code></pre></div>
+</div>
+<div id="tracking-variable-usage" class="section level3">
+<h3>Tracking Variable Usage</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Find where a variable is used</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;user_data&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co"># Find reactive values in Shiny apps</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;reactiveVal&quot;</span>)</span></code></pre></div>
+</div>
+<div id="locating-ui-components" class="section level3">
+<h3>Locating UI Components</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Find specific input widgets</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;selectInput&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># Find output renderers</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;renderPlot&quot;</span>)</span></code></pre></div>
+</div>
+<div id="code-review-and-todos" class="section level3">
+<h3>Code Review and TODOs</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Find all </span><span class="al">TODO</span><span class="co"> comments</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;TODO&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co"># Find </span><span class="al">FIXME</span><span class="co"> or bug markers</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;FIXME&quot;</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co"># Find deprecated functions</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;.Deprecated&quot;</span>)</span></code></pre></div>
+</div>
+<div id="library-and-package-usage" class="section level3">
+<h3>Library and Package Usage</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Find all uses of a package</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;dplyr::&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co"># Find library calls</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;library(&quot;</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co"># Find specific ggplot geoms</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;geom_point&quot;</span>)</span></code></pre></div>
+</div>
+<div id="debugging" class="section level3">
+<h3>Debugging</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Find browser() calls you may have left in code</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;browser()&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co"># Find print statements</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;print(&quot;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># Find error handling</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;tryCatch&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="working-with-results-programmatically" class="section level2">
+<h2>Working with Results Programmatically</h2>
+<p><code>contextFind()</code> invisibly returns a list of results that
+you can work with:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Store results</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">contextFind</span>(<span class="st">&quot;ggplot&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># Access the first match</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>results[[<span class="dv">1</span>]]<span class="sc">$</span>file         <span class="co"># Full file path</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>results[[<span class="dv">1</span>]]<span class="sc">$</span>match_line   <span class="co"># Line number where match was found</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>results[[<span class="dv">1</span>]]<span class="sc">$</span>mtime        <span class="co"># File modification time</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>results[[<span class="dv">1</span>]]<span class="sc">$</span>context      <span class="co"># Named character vector of context lines</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co"># Get all matching files</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="fu">unique</span>(<span class="fu">sapply</span>(results, <span class="cf">function</span>(x) x<span class="sc">$</span>file))</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co"># Count matches per file</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">sapply</span>(results, <span class="cf">function</span>(x) <span class="fu">basename</span>(x<span class="sc">$</span>file)))</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co"># Find most recently modified files with matches</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a>recent <span class="ot">&lt;-</span> results[[<span class="fu">length</span>(results)]]</span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Most recent match in:&quot;</span>, <span class="fu">basename</span>(recent<span class="sc">$</span>file),</span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>    <span class="st">&quot;at line&quot;</span>, recent<span class="sc">$</span>match_line, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+</div>
+<div id="tips-and-tricks" class="section level2">
+<h2>Tips and Tricks</h2>
+<div id="search-for-partial-patterns" class="section level3">
+<h3>1. Search for Partial Patterns</h3>
+<p>Since <code>contextFind</code> uses literal string matching (not
+regex), you can search for partial code patterns:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># Find all assignments to variables starting with &quot;df_&quot;</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;df_&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co"># Find function calls (including arguments)</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;function(&quot;</span>)</span></code></pre></div>
+</div>
+<div id="combine-with-version-control" class="section level3">
+<h3>2. Combine with Version Control</h3>
+<p>Search for recent changes in modified files:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># After modifying files, find where you used a new function</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;new_function&quot;</span>)</span></code></pre></div>
+<p>The results are sorted by modification time, so your recent changes
+appear last - right where you’re reading in the console.</p>
+</div>
+<div id="navigate-large-projects" class="section level3">
+<h3>3. Navigate Large Projects</h3>
+<p>For large Shiny apps or packages:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># Find all observers</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;observe(&quot;</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co"># Find all event handlers</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;observeEvent&quot;</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co"># Find module calls</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;Module(&quot;</span>)</span></code></pre></div>
+</div>
+<div id="batch-searches" class="section level3">
+<h3>4. Batch Searches</h3>
+<p>Use the function in scripts or reports:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># Find all functions that need documentation</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">contextFind</span>(<span class="st">&quot;&lt;- function&quot;</span>, <span class="at">contextLines =</span> <span class="dv">0</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co"># Check if they have roxygen comments</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>documented <span class="ot">&lt;-</span> <span class="fu">sapply</span>(results, <span class="cf">function</span>(r) {</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>  lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(r<span class="sc">$</span>file)</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>  line_before <span class="ot">&lt;-</span> lines[<span class="fu">max</span>(<span class="dv">1</span>, r<span class="sc">$</span>match_line <span class="sc">-</span> <span class="dv">1</span>)]</span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>  <span class="fu">grepl</span>(<span class="st">&quot;#&#39;&quot;</span>, line_before)</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>})</span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%d of %d functions have documentation</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>            <span class="fu">sum</span>(documented), <span class="fu">length</span>(documented)))</span></code></pre></div>
+</div>
+<div id="case-sensitive-searching" class="section level3">
+<h3>5. Case-Sensitive Searching</h3>
+<p>Remember that <code>contextFind</code> is case-sensitive:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># These are different searches:</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;data&quot;</span>)       <span class="co"># lowercase</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;Data&quot;</span>)       <span class="co"># uppercase</span></span></code></pre></div>
+</div>
+<div id="work-with-file-patterns" class="section level3">
+<h3>6. Work with File Patterns</h3>
+<p>While <code>contextFind</code> searches both .R and .Rmd files
+automatically, you can narrow results by path:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># Search only source files</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;function&quot;</span>, <span class="at">path =</span> <span class="st">&quot;R/&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co"># Search only test files</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;expect_&quot;</span>, <span class="at">path =</span> <span class="st">&quot;tests/testthat/&quot;</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co"># Search only vignettes</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;knitr&quot;</span>, <span class="at">path =</span> <span class="st">&quot;vignettes/&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="comparison-with-other-tools" class="section level2">
+<h2>Comparison with Other Tools</h2>
+<div id="vs.-rstudios-find-in-files" class="section level3">
+<h3>vs. RStudio’s Find in Files</h3>
+<ul>
+<li><strong>Advantages of contextFind</strong>:
+<ul>
+<li>Shows context without opening files</li>
+<li>Clickable links in console output</li>
+<li>Programmatic access to results</li>
+<li>Quick keyboard shortcut access</li>
+<li>Sorted by modification time</li>
+</ul></li>
+<li><strong>When to use RStudio’s Find in Files</strong>:
+<ul>
+<li>Need regex patterns</li>
+<li>Want to replace text</li>
+<li>Need to search non-R files</li>
+</ul></li>
+</ul>
+</div>
+<div id="vs.-grepripgrep" class="section level3">
+<h3>vs. grep/ripgrep</h3>
+<ul>
+<li><strong>Advantages of contextFind</strong>:
+<ul>
+<li>R-native interface</li>
+<li>Automatically finds R and Rmd files</li>
+<li>Formatted output with clickable links</li>
+<li>Integrated with RStudio</li>
+</ul></li>
+<li><strong>When to use grep/ripgrep</strong>:
+<ul>
+<li>Need advanced regex</li>
+<li>Search across all file types</li>
+<li>Working in terminal</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="advanced-examples" class="section level2">
+<h2>Advanced Examples</h2>
+<div id="find-all-exported-functions-in-a-package" class="section level3">
+<h3>Find All Exported Functions in a Package</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># Search for roxygen @export tags</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">contextFind</span>(<span class="st">&quot;@export&quot;</span>, <span class="at">path =</span> <span class="st">&quot;R/&quot;</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co"># Find what functions are exported</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>exported_functions <span class="ot">&lt;-</span> <span class="fu">sapply</span>(results, <span class="cf">function</span>(r) {</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>  lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(r<span class="sc">$</span>file)</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>  <span class="co"># Look ahead for function definition</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  func_line <span class="ot">&lt;-</span> lines[r<span class="sc">$</span>match_line <span class="sc">+</span> <span class="dv">1</span>]</span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">&quot;&lt;- function&quot;</span>, func_line)) {</span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>    <span class="fu">trimws</span>(<span class="fu">gsub</span>(<span class="st">&quot;&lt;-.*&quot;</span>, <span class="st">&quot;&quot;</span>, func_line))</span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a>    <span class="cn">NA</span></span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>  }</span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a>})</span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Exported functions:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">na.omit</span>(exported_functions))</span></code></pre></div>
+</div>
+<div id="check-for-hardcoded-values" class="section level3">
+<h3>Check for Hardcoded Values</h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># Find potential hardcoded file paths</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;C:/&quot;</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;/Users/&quot;</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="co"># Find hardcoded credentials (be careful!)</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;password&quot;</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;api_key&quot;</span>)</span></code></pre></div>
+</div>
+<div id="analyze-shiny-app-structure" class="section level3">
+<h3>Analyze Shiny App Structure</h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># Count UI elements</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>ui_results <span class="ot">&lt;-</span> <span class="fu">contextFind</span>(<span class="st">&quot;Input(&quot;</span>, <span class="at">path =</span> <span class="st">&quot;.&quot;</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Number of input widgets:&quot;</span>, <span class="fu">length</span>(ui_results), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co"># Count outputs</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>output_results <span class="ot">&lt;-</span> <span class="fu">contextFind</span>(<span class="st">&quot;render&quot;</span>, <span class="at">path =</span> <span class="st">&quot;.&quot;</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Number of render functions:&quot;</span>, <span class="fu">length</span>(output_results), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="co"># Find reactive chains</span></span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;reactive(&quot;</span>)</span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a><span class="fu">contextFind</span>(<span class="st">&quot;observe(&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="troubleshooting" class="section level2">
+<h2>Troubleshooting</h2>
+<div id="no-results-found" class="section level3">
+<h3>No Results Found</h3>
+<p>If <code>contextFind</code> returns no results:</p>
+<ol style="list-style-type: decimal">
+<li>Check your search term for typos</li>
+<li>Verify the <code>path</code> parameter points to the correct
+directory</li>
+<li>Ensure <code>recursive = TRUE</code> if searching
+subdirectories</li>
+<li>Remember that searches are case-sensitive</li>
+</ol>
+</div>
+<div id="too-many-results" class="section level3">
+<h3>Too Many Results</h3>
+<p>To narrow down results:</p>
+<ol style="list-style-type: decimal">
+<li>Use more specific search terms</li>
+<li>Limit the search path: <code>path = &quot;R/&quot;</code></li>
+<li>Use <code>recursive = FALSE</code> for current directory only</li>
+<li>Reduce <code>contextLines</code> to see less context</li>
+</ol>
+</div>
+<div id="clickable-links-not-working" class="section level3">
+<h3>Clickable Links Not Working</h3>
+<p>Clickable links require:</p>
+<ul>
+<li>A terminal/console that supports ANSI escape sequences</li>
+<li>RStudio (recommended)</li>
+<li>Some external terminals may not support <code>file://</code>
+links</li>
+</ul>
+</div>
+</div>
+<div id="contributing" class="section level2">
+<h2>Contributing</h2>
+<p>Found a bug or have a feature request? Please visit the <a href="https://github.com/s87jackson/contextFind">GitHub repository</a>
+to open an issue or submit a pull request.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -36,7 +36,7 @@ This opens a mini shiny application with inputs for the search string, the direc
 whether to search subdiretories, and how many lines of context to print before
 and after the found search string:
 
-![\n](inst/images/miniPage.png)
+![\n](man/figures/miniPage.png)
 
 Clicking the contextFind button prints the results to the console. For each result (match), `contextFind()` 
 provides a clickable labelled link indicating the file and line number of the result, followed by
@@ -63,12 +63,12 @@ install.packages("contextFind")
 
 After installing contextFind, restart RStudio, then set contextFind to a hotkey by
 selecting Tools >> Modify Keyboard Shortcuts:
-
-![\n](inst/images/hotkey.png)
-
-
+ 
+![\n](man/figures/hotkey.png)
+ 
+ 
 Now typing Ctrl+Shift+F opens the gadget to perform the search. If text is higlighted when you 
 type the hotkey, it will be passed to the gadget automatically. In the example below, 
 we search for the string 'selected' and see the results:
-
-![\n](inst/images/results.png)
+ 
+![\n](man/figures/results.png)

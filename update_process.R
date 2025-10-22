@@ -15,6 +15,7 @@ unlink("C:/Users/SteveJackson/OneDrive - Toxcel/contextFind.Rcheck", recursive =
 # Check package ----
 devtools::check(args = c('--as-cran'), check_dir = tempdir())
 
+
 # Move Claude files ----
 
 if (dir.exists(".claude")) {
@@ -46,13 +47,9 @@ pkgdown::build_site_github_pages()
 
 # Git commit ----
 message("MANUAL STEP: Git commit all changed files (Commit, Push)")
-readline(prompt = "Press [enter] to continue after committing")
 
 # CRAN submission prep ----
 message("\n=== FOR CRAN SUBMISSION ===")
 message("1. Update cran-comments.md")
 message("2. Make sure version number in DESCRIPTION is accurate")
-message("3. Run: devtools::submit_cran()")
-message("4. See https://r-pkgs.org/release.html for more info")
-
 devtools::submit_cran()
