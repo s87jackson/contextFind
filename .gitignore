@@ -5,7 +5,8 @@
 .DS_Store
 .quarto
 CLAUDE.md
-^update_process\.R$
+update_process.R
+reddit-post.md
 in_development
 in_development/
 sticker.pptx
@@ -14,7 +15,6 @@ inst/doc
 .Rproj.user
 /doc/
 /Meta/
-^update_process\.R$
 
 .RData
 .RDataTmp

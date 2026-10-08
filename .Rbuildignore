@@ -25,4 +25,4 @@ in_development/
 
 ^\.github
 
-^update_process\.R$
+^reddit-post\.md$
